@@ -19,7 +19,7 @@ package us.b3k.kafka.ws;
 import com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import us.b3k.kafka.ws.consumer.KafkaConsumer;
+import us.b3k.kafka.ws.consumer.KafkawebsocketConsumer;
 import us.b3k.kafka.ws.consumer.KafkaConsumerFactory;
 import us.b3k.kafka.ws.messages.BinaryMessage;
 import us.b3k.kafka.ws.messages.BinaryMessage.BinaryMessageDecoder;
@@ -46,7 +46,7 @@ import java.util.Map;
 public class KafkaWebsocketEndpoint {
     private static Logger LOG = LoggerFactory.getLogger(KafkaWebsocketEndpoint.class);
 
-    private KafkaConsumer consumer = null;
+    private KafkawebsocketConsumer consumer = null;
 
     public static Map<String, String> getQueryMap(String query)
     {

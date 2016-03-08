@@ -1,9 +1,11 @@
 package us.b3k.kafka.ws.consumer;
-
 import kafka.consumer.ConsumerConfig;
 import us.b3k.kafka.ws.transforms.Transform;
 
 import javax.websocket.Session;
+
+
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
@@ -26,11 +28,11 @@ public class KafkaConsumerFactory {
         this.outputTransform = outputTransform;
     }
 
-    public KafkaConsumer getConsumer(String groupId, final String topics, final Session session) {
+    public KafkawebsocketConsumer getConsumer(String groupId, final String topics, final Session session) {
         return getConsumer(groupId, Arrays.asList(topics.split(",")), session);
     }
 
-    public KafkaConsumer getConsumer(String groupId, final List<String> topics, final Session session) {
+    public KafkawebsocketConsumer getConsumer(String groupId, final List<String> topics, final Session session) {
         if (groupId.isEmpty()) {
             groupId = String.format("%s-%d", session.getId(), System.currentTimeMillis());
             if (configProps.containsKey("group.id")) {
@@ -39,9 +41,12 @@ public class KafkaConsumerFactory {
         }
         Properties sessionProps = (Properties)configProps.clone();
         sessionProps.setProperty("group.id", groupId);
-
-        KafkaConsumer consumer = new KafkaConsumer(new ConsumerConfig(sessionProps), executorService, outputTransform, topics, session);
-        consumer.start();
+        sessionProps.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
+        sessionProps.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
+        
+        KafkawebsocketConsumer consumer = new KafkawebsocketConsumer(sessionProps, executorService, outputTransform, topics, session);
+        executorService.submit(consumer);
+       // consumer.start();
         return consumer;
     }
 }
